@@ -1,6 +1,6 @@
-const BlogController = {
+const userController = {
   createBlog: (request, response) => {
     response.json({ message: "Blog created sucessfully" });
   },
 };
-module.exports = BlogController;
+module.exports = userController;
