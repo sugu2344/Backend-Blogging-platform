@@ -94,6 +94,16 @@ const userController = {
       response.status(500).json({ message: error.message });
     }
   },
+  // .....
+  logout: async (request, response) => {
+    try {
+      //  to clear the cookie
+      response.clearCookie("token");
+      response.status(200).json({ message: "logout sucessfull" });
+    } catch (error) {
+      response.status(500).json({ message: error.message });
+    }
+  },
   // ........
   changePassword: async (request, response) => {
     try {
