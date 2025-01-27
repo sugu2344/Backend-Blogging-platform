@@ -107,7 +107,7 @@ const userController = {
   // ........
   changePassword: async (request, response) => {
     try {
-      const { code, password } = request.params;
+      const { code, password } = request.body;
       const user = await User.findOne({
         resetPassword: code,
         resetPasswordExpires: { $gt: Date.now() },

@@ -13,6 +13,7 @@ const user = {
       request.userId = verified.id;
       //   console.log(verified);
     } catch (error) {
+      console.log("error from middleware");
       return response.status(400).json({ message: error.message });
     }
 
