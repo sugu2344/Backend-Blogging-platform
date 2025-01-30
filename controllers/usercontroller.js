@@ -29,7 +29,7 @@ const userController = {
       const { email, password } = request.body;
       const user = await User.findOne({ email });
       if (!user) {
-        return response.status(404).json({ message: "usser not found" });
+        return response.status(404).json({ message: "user not found" });
       }
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
