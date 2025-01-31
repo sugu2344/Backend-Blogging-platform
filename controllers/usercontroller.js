@@ -18,7 +18,7 @@ const userController = {
         password: PasswordHash,
       });
       await newUser.save();
-      response.json({ message: "user registered sucessfully" });
+      response.json({ message: "user registered successfully" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
@@ -41,6 +41,7 @@ const userController = {
         },
         SECRET_KEY
       );
+       response.cookie("token", token, { httpOnly: true });
       response.json({ token, message: "user logged in sucessfully" });
     } catch (error) {
       response.status(500).json({ message: error.message });
@@ -99,7 +100,7 @@ const userController = {
     try {
       //  to clear the cookie
       response.clearCookie("token");
-      response.status(200).json({ message: "logout sucessfull" });
+      response.status(200).json({ message: "logout successfull" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }

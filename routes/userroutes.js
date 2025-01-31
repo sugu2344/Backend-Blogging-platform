@@ -5,7 +5,12 @@ const user = require("../middleware/user");
 const userRouter = express.Router();
 userRouter.post("/authenticate", userController.authenticate);
 userRouter.post("/register", userController.register);
-userRouter.get("/profile", user.verifyLogin, userController.profile);
+userRouter.get(
+  "/profile",
+  user.checkAuth,
+  user.allowRoles([ "admin"]),
+  userController.profile
+);
 userRouter.post("/reset", userController.resetPassword);
 userRouter.put("/change", userController.changePassword);
 userRouter.post("/logout", userController.logout);
