@@ -8,7 +8,7 @@ userRouter.post("/register", userController.register);
 userRouter.get(
   "/profile",
   user.checkAuth,
-  user.allowRoles([ "admin"]),
+  user.allowRoles(["admin", "user"]),
   userController.profile
 );
 userRouter.post("/reset", userController.resetPassword);

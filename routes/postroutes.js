@@ -1,0 +1,10 @@
+const express = require("express");
+const post = require("../middleware/post");
+const postController = require("../controllers/postcontroller");
+const postRouter = express.Router();
+postRouter.post("/create", post.authenticateUser, postController.createPost);
+postRouter.get("/get", postController.getPosts);
+postRouter.get("/get/:id", postController.getPostById);
+postRouter.put("/update/:id", postController.updatePost);
+postRouter.delete("/delete/:id", postController.deletePost);
+module.exports = postRouter;
