@@ -12,7 +12,7 @@ const postController = {
         content,
         tags,
         categories,
-        status: status || "draft", 
+        status: status || "draft",
         author: req.user.id,
       });
 
@@ -73,13 +73,12 @@ const postController = {
   // delete
   deletePost: async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
-      if (!post) return res.status(404).json({ message: "Post not found" });
-      if (post.author.toString() !== req.user.id)
-        return res.status(403).json({ message: "Unauthorized" });
-
-      await post.remove();
-      res.json({ message: "Post deleted successfully" });
+      const { id } = req.params;
+      const deletePost = await Post.findByIdAndDelete(id);
+      if (!deletePost) {
+        return res.status(404).json({ message: "post not found" });
+      }
+      res.json({ message: "post deleted successfully", deletePost });
     } catch (error) {
       res.status(500).json({ message: "Error deleting post", error });
     }
