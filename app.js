@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/userroutes");
 const postRouter = require("./routes/postroutes");
 const commentRouter = require("./routes/commentroutes");
+const subscriptionRouter = require("./routes/subscriptionroute");
 const app = express();
 app.use(cookieParser());
 app.use(
@@ -20,6 +21,7 @@ app.use(logger);
 app.use("/user", userRouter);
 app.use("/post", postRouter);
 app.use("/comment", commentRouter);
+app.use("/subscription", subscriptionRouter);
 app.use(morgan("dev"));
 
 app.use(ErrorRoute);
