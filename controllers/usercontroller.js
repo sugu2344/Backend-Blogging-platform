@@ -18,7 +18,7 @@ const userController = {
         password: PasswordHash,
       });
       await newUser.save();
-      response.json({ message: "user registered successfully" });
+      response.status(201).json({ message: "user registered successfully" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
@@ -41,8 +41,10 @@ const userController = {
         },
         SECRET_KEY
       );
-       response.cookie("token", token, { httpOnly: true });
-      response.json({ token, message: "user logged in sucessfully" });
+      response.cookie("token", token, { httpOnly: true });
+       response
+         .status(201)
+         .json({ token, message: "user logged in sucessfully" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
@@ -89,7 +91,7 @@ const userController = {
         if (err) {
           response.status(404).json({ message: "something went wrong " });
         }
-        response.status(200).json({ message: "password reset email sent" });
+        response.status(201).json({ message: "password reset email sent" });
       });
     } catch {
       response.status(500).json({ message: error.message });
@@ -100,7 +102,7 @@ const userController = {
     try {
       //  to clear the cookie
       response.clearCookie("token");
-      response.status(200).json({ message: "logout successfull" });
+      response.status(201).json({ message: "logout successfull" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
@@ -124,7 +126,7 @@ const userController = {
       user.resetPasswordExpires = null;
       await user.save();
       response
-        .status(200)
+        .status(201)
         .json({ message: "Password has been successfully reset" });
     } catch (error) {
       console.error("Error during password reset:", error.message);
