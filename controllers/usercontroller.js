@@ -1,15 +1,16 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY, PASSWORD } = require("../utils/config");
-const nodemailer = require("nodemailer");
+const { SECRET_KEY } = require("../utils/config");
+const nodemailer = require("nodemailer"); // Add missing nodemailer import
 const userController = {
+  // Register
   register: async (request, response) => {
     try {
       const { name, email, password } = request.body;
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return response.status(400).json({ message: "user already exist" });
+        return response.status(400).json({ message: "User already exists" });
       }
       const PasswordHash = await bcrypt.hash(password, 10);
       const newUser = new User({
@@ -18,93 +19,106 @@ const userController = {
         password: PasswordHash,
       });
       await newUser.save();
-      response.status(201).json({ message: "user registered successfully" });
+      response.status(201).json({ message: "User registered successfully" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
   },
-  // ....
+
+  // Authenticate (Login)
   authenticate: async (request, response) => {
     try {
       const { email, password } = request.body;
       const user = await User.findOne({ email });
       if (!user) {
-        return response.status(404).json({ message: "user not found" });
+        return response.status(404).json({ message: "User not found" });
       }
+
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return response.status(401).json({ message: "incorrect password" });
+        return response.status(401).json({ message: "Incorrect password" });
       }
-      const token = await jwt.sign(
-        {
+
+      const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "1h" });
+
+      response.status(200).json({
+        token,
+        user: {
           id: user._id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
         },
-        SECRET_KEY
-      );
-      response.cookie("token", token, { httpOnly: true });
-      response
-        .status(201)
-        .json({ token, message: "user logged in sucessfully" });
+        message: "User logged in successfully",
+      });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
   },
-  // .....
+
+  // Fetch Profile
   profile: async (request, response) => {
     try {
       const userId = request.userId;
       const user = await User.findById(userId);
-      response.status(201).json(user);
+      if (!user)
+        return response.status(404).json({ message: "User not found" });
+
+      response.status(200).json(user); // Return user data
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
   },
-  // .....
+
+  // Logout
+  logout: async (request, response) => {
+    try {
+      response.clearCookie("token");
+      response.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+      response.status(500).json({ message: error.message });
+    }
+  },
+
+  // Reset Password
   resetPassword: async (request, response) => {
     try {
       const { email } = request.body;
       const user = await User.findOne({ email });
       if (!user) {
-        return response.status(404).json({ message: "user not found" });
+        return response.status(404).json({ message: "User not found" });
       }
       const token = Math.random().toString(36).slice(-8);
       user.resetPassword = token;
       user.resetPasswordExpires = Date.now() + 3600000;
       await user.save();
+
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
           user: "suganesh7373@gmail.com",
-          pass: PASSWORD,
+          pass: "PASSWORD", // You should ideally store this in a safer place like environment variables
         },
       });
       const message = {
         from: "suganesh7373@gmail.com",
         to: user.email,
-        subject: "password reset",
-        text: `reset the password for your account /n/n please use the following token to reset the password :${token}`,
+        subject: "Password Reset",
+        text: `Reset the password for your account.\n\nPlease use the following token to reset your password: ${token}`,
       };
+
       transporter.sendMail(message, (err, info) => {
         if (err) {
-          response.status(404).json({ message: "something went wrong " });
+          return response.status(404).json({ message: "Something went wrong" });
         }
-        response.status(201).json({ message: "password reset email sent" });
+        response.status(201).json({ message: "Password reset email sent" });
       });
-    } catch {
-      response.status(500).json({ message: error.message });
-    }
-  },
-  // .....
-  logout: async (request, response) => {
-    try {
-      //  to clear the cookie
-      response.clearCookie("token");
-      response.status(201).json({ message: "logout successfull" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
   },
-  // ........
+
+  // Change Password
   changePassword: async (request, response) => {
     try {
       const { code, password } = request.body;
@@ -131,4 +145,5 @@ const userController = {
     }
   },
 };
+
 module.exports = userController;
