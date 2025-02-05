@@ -61,10 +61,7 @@ const userController = {
     try {
       const userId = request.userId;
       const user = await User.findById(userId);
-      if (!user)
-        return response.status(404).json({ message: "User not found" });
-
-      response.status(200).json(user); // Return user data
+      response.status(201).json(user);
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
