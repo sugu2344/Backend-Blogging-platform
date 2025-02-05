@@ -42,9 +42,9 @@ const userController = {
         SECRET_KEY
       );
       response.cookie("token", token, { httpOnly: true });
-       response
-         .status(201)
-         .json({ token, message: "user logged in sucessfully" });
+      response
+        .status(201)
+        .json({ token, message: "user logged in sucessfully" });
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
@@ -53,11 +53,8 @@ const userController = {
   profile: async (request, response) => {
     try {
       const userId = request.userId;
-      // console.log(userId);
       const user = await User.findById(userId);
-      // select is ised to remove visibility  of data what are we dont want to see the datas
-
-      response.json(user);
+      response.status(201).json(user);
     } catch (error) {
       response.status(500).json({ message: error.message });
     }
