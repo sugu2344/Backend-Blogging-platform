@@ -8,7 +8,7 @@ const postRouter = express.Router();
 postRouter.post("/create", post.authenticateUser, postController.createPost);
 postRouter.get("/get", postController.getPosts);
 postRouter.get("/get/:id", postController.getPostById);
-postRouter.put("/update/:id", postController.updatePost);
+postRouter.put("/update/:id", post.authenticateUser, postController.updatePost);
 postRouter.delete(
   "/delete/:id",
   //   comment.authMiddleware,
