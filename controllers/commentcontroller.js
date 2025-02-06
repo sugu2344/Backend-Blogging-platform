@@ -77,7 +77,8 @@ const commentController = {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  },
+  }
+}
   // moderateComment
   // moderateComment: async (req, res) => {
   //   try {
@@ -92,5 +93,5 @@ const commentController = {
   //     res.status(500).json({ error: error.message });
   //   }
   // },
-};
+
 module.exports = commentController;
