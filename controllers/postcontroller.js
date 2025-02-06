@@ -83,5 +83,25 @@ const postController = {
       res.status(500).json({ message: "Error deleting post", error });
     }
   },
+  // get post by user
+  getPostsByUser: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const posts = await Post.find({ author: userId }).populate(
+        "author",
+        "name email"
+      );
+
+      if (!posts.length) {
+        return res
+          .status(404)
+          .json({ message: "No posts found for this user" });
+      }
+
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching posts by user", error });
+    }
+  },
 };
 module.exports = postController;

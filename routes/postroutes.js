@@ -14,4 +14,6 @@ postRouter.delete(
   //   comment.authMiddleware,
   postController.deletePost
 );
+postRouter.get("/user/:userId", postController.getPostsByUser);
+
 module.exports = postRouter;
