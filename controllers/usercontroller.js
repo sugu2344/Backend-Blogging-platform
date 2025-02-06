@@ -141,6 +141,16 @@ const userController = {
       response.status(500).json({ message: "Internal server error" });
     }
   },
+  // get all users
+
+  getAllUsers: async (request, response) => {
+    try {
+      const users = await User.find({}, "-password");
+      response.status(200).json(users);
+    } catch (error) {
+      response.status(500).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = userController;

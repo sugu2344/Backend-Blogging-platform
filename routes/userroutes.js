@@ -14,5 +14,12 @@ userRouter.get(
 userRouter.post("/reset", userController.resetPassword);
 userRouter.put("/change", userController.changePassword);
 userRouter.post("/logout", userController.logout);
+userRouter.get(
+  "/getallusers",
+  user.checkAuth,
+  user.allowRoles(["admin","user"]),
+  userController.getAllUsers
+);
+
 
 module.exports = userRouter;
