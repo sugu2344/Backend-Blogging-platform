@@ -20,6 +20,7 @@ userRouter.get(
   user.allowRoles(["admin","user"]),
   userController.getAllUsers
 );
+userRouter.put("/updateprofile", user.checkAuth, userController.updateProfile);
 
 
 module.exports = userRouter;

@@ -47,6 +47,7 @@ const userController = {
           id: user._id,
           email: user.email,
           name: user.name,
+          bio:user.bio,
           role: user.role,
         },
         message: "User logged in successfully",
@@ -149,6 +150,23 @@ const userController = {
       response.status(200).json(users);
     } catch (error) {
       response.status(500).json({ message: error.message });
+    }
+  },
+  // update profile
+  updateProfile: async (req, res) => {
+    try {
+      const userId = req.userId;
+      const { name, bio } = req.body;
+
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { name, bio, updatedAt: Date.now() },
+        { new: true, select: "-password" }
+      );
+
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   },
 };
