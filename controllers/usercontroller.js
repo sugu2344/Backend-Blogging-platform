@@ -108,7 +108,6 @@ const userController = {
         text: `Reset your password for your account.\n\nPlease use the following token to reset your password: ${token}`,
       };
 
-      
       try {
         await transporter.sendMail(message);
         return response
@@ -128,6 +127,8 @@ const userController = {
   changePassword: async (request, response) => {
     try {
       const { code, password } = request.body;
+      //  const { code} = request.params;
+      //  const { password } = request.body;
       const user = await User.findOne({
         resetPassword: code,
         resetPasswordExpires: { $gt: Date.now() },
@@ -143,7 +144,7 @@ const userController = {
       user.resetPasswordExpires = null;
       await user.save();
       response
-        .status(201)
+        .status(200)
         .json({ message: "Password has been successfully reset" });
     } catch (error) {
       console.error("Error during password reset:", error.message);
