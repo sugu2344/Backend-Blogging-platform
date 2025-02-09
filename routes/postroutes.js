@@ -17,4 +17,9 @@ postRouter.delete(
 postRouter.get("/user/:userId", postController.getPostsByUser);
 postRouter.get("/post/categories", postController.getCategories);
 postRouter.get("/post/tags", postController.getTags);
+postRouter.get(
+  "/currentuser",
+  post.authenticateUser,
+  postController.getPostsByCurrentUser
+);
 module.exports = postRouter;

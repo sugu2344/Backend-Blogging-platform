@@ -126,5 +126,25 @@ const postController = {
       res.status(500).json({ message: "Error fetching tags", error });
     }
   },
+  getPostsByCurrentUser: async (req, res) => {
+    try {
+      const userId = req.user.id; // Extract userId from authenticated request
+
+      if (!userId) {
+        return res
+          .status(401)
+          .json({ message: "Unauthorized: User not found" });
+      }
+
+      const posts = await Post.find({ author: userId }).populate(
+        "author",
+        "name email"
+      );
+
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching user posts", error });
+    }
+  },
 };
 module.exports = postController;
