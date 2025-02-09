@@ -31,7 +31,13 @@ const postController = {
   // get
   getPosts: async (req, res) => {
     try {
-      const posts = await Post.find().populate("author", "name email");
+      const { category, tag } = req.query;
+      let query = {};
+
+      if (category) query.categories = category;
+      if (tag) query.tags = tag;
+
+      const posts = await Post.find(query).populate("author", "name email");
       res.json(posts);
     } catch (error) {
       res.status(500).json({ message: "Error fetching posts", error });
@@ -101,6 +107,23 @@ const postController = {
       res.json(posts);
     } catch (error) {
       res.status(500).json({ message: "Error fetching posts by user", error });
+    }
+  },
+  getCategories: async (req, res) => {
+    try {
+      const categories = await Post.distinct("categories");
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching categories", error });
+    }
+  },
+
+  getTags: async (req, res) => {
+    try {
+      const tags = await Post.distinct("tags");
+      res.json(tags);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching tags", error });
     }
   },
 };
