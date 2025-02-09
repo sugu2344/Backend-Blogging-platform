@@ -1,8 +1,8 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = require("../utils/config");
-const nodemailer = require("nodemailer"); // Add missing nodemailer import
+const { SECRET_KEY, PASSWORD } = require("../utils/config");
+const nodemailer = require("nodemailer");
 const userController = {
   // Register
   register: async (request, response) => {
@@ -83,36 +83,44 @@ const userController = {
     try {
       const { email } = request.body;
       const user = await User.findOne({ email });
+
       if (!user) {
         return response.status(404).json({ message: "User not found" });
       }
+
       const token = Math.random().toString(36).slice(-8);
       user.resetPassword = token;
-      user.resetPasswordExpires = Date.now() + 3600000;
+      user.resetPasswordExpires = Date.now() + 3600000; // 1 hour expiry
       await user.save();
 
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
           user: "suganesh7373@gmail.com",
-          pass: "PASSWORD", // You should ideally store this in a safer place like environment variables
+          pass: PASSWORD,
         },
       });
+
       const message = {
         from: "suganesh7373@gmail.com",
         to: user.email,
         subject: "Password Reset",
-        text: `Reset the password for your account.\n\nPlease use the following token to reset your password: ${token}`,
+        text: `Reset your password for your account.\n\nPlease use the following token to reset your password: ${token}`,
       };
 
-      transporter.sendMail(message, (err, info) => {
-        if (err) {
-          return response.status(404).json({ message: "Something went wrong" });
-        }
-        response.status(201).json({ message: "Password reset email sent" });
-      });
+      
+      try {
+        await transporter.sendMail(message);
+        return response
+          .status(200)
+          .json({ message: "Password reset email sent" });
+      } catch (err) {
+        console.error("Error sending email:", err);
+        return response.status(500).json({ message: "Error sending email" });
+      }
     } catch (error) {
-      response.status(500).json({ message: error.message });
+      console.error("Error in resetPassword:", error);
+      return response.status(500).json({ message: error.message });
     }
   },
 
@@ -171,7 +179,7 @@ const userController = {
       res.status(500).json({ message: error.message });
     }
   },
-  // get 
+  // get
   getprofile: async (req, res) => {
     try {
       const userId = req.userId;
@@ -180,7 +188,7 @@ const userController = {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  }
+  },
 };
 
 module.exports = userController;

@@ -6,12 +6,14 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   bio: { type: String, default: "" }, // Added bio field
   role: { type: String, enum: ["admin", "user"], default: "user" },
-   profilePicture: String,
+  profilePicture: String,
   socialLinks: {
     twitter: String,
     linkedin: String,
-    github: String
+    github: String,
   },
+  resetPassword: String,
+  resetPasswordExpires: Date,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
