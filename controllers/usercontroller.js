@@ -47,7 +47,7 @@ const userController = {
           id: user._id,
           email: user.email,
           name: user.name,
-          bio:user.bio,
+          bio: user.bio,
           role: user.role,
         },
         message: "User logged in successfully",
@@ -156,19 +156,31 @@ const userController = {
   updateProfile: async (req, res) => {
     try {
       const userId = req.userId;
-      const { name, bio } = req.body;
+      const { name, bio, socialLinks } = req.body;
+      const updatedData = { name, bio, socialLinks, updatedAt: Date.now() };
 
-      const user = await User.findByIdAndUpdate(
-        userId,
-        { name, bio, updatedAt: Date.now() },
-        { new: true, select: "-password" }
-      );
+      if (req.file) updatedData.profilePicture = req.file.filename;
+
+      const user = await User.findByIdAndUpdate(userId, updatedData, {
+        new: true,
+        select: "-password",
+      });
 
       res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
+  // get 
+  getprofile: async (req, res) => {
+    try {
+      const userId = req.userId;
+      const user = await User.findById(userId, "-password");
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 };
 
 module.exports = userController;

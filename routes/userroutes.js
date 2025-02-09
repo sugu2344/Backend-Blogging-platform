@@ -17,10 +17,10 @@ userRouter.post("/logout", userController.logout);
 userRouter.get(
   "/getallusers",
   user.checkAuth,
-  user.allowRoles(["admin","user"]),
+  user.allowRoles(["admin", "user"]),
   userController.getAllUsers
 );
 userRouter.put("/updateprofile", user.checkAuth, userController.updateProfile);
 
-
+userRouter.get("/getprofile", user.checkAuth, userController.getprofile);
 module.exports = userRouter;
