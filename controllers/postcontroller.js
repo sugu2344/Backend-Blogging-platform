@@ -146,5 +146,14 @@ const postController = {
       res.status(500).json({ message: "Error fetching user posts", error });
     }
   },
+  // get count
+  getTotalPostCount: async (req, res) => {
+    try {
+      const totalPosts = await Post.countDocuments();
+      res.json({ totalPosts });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching post count", error });
+    }
+  },
 };
 module.exports = postController;

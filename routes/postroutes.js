@@ -22,4 +22,6 @@ postRouter.get(
   post.authenticateUser,
   postController.getPostsByCurrentUser
 );
+postRouter.get("/posts/count", postController.getTotalPostCount);
+
 module.exports = postRouter;
