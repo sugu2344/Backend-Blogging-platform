@@ -8,7 +8,7 @@ const SubscriptionController = {
       const { bloggerId, category } = req.body;
       const userId = req.user.id;
 
-      // Check if user is already subscribed
+ 
       const existingSubscription = await Subscription.findOne({
         user: userId,
         blogger: bloggerId,
@@ -25,13 +25,13 @@ const SubscriptionController = {
       });
       await newSubscription.save();
 
-      // Fetch user email
+ 
       const user = await User.findById(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Send email notification
+      
       const emailSubject = "Subscription Confirmation";
       const emailText = `You have successfully subscribed to updates from ${
         category || "your selected blogger"
