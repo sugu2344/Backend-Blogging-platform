@@ -11,7 +11,7 @@ postRouter.get("/get/:id", postController.getPostById);
 postRouter.put("/update/:id", post.authenticateUser, postController.updatePost);
 postRouter.delete(
   "/delete/:id",
-  //   comment.authMiddleware,
+  
   postController.deletePost
 );
 postRouter.get("/user/:userId", postController.getPostsByUser);

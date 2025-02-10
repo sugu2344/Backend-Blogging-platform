@@ -28,10 +28,4 @@ commentRouter.get(
   commentController.getTotalCommentCount
 );
 
-// commentRouter.patch(
-//   "/moder/:id/moderate",
-//   comment.authMiddleware,
-//   comment.adminMiddleware,
-//   commentController.moderateComment
-// );
 module.exports = commentRouter;
