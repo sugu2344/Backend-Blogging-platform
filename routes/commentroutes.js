@@ -23,6 +23,11 @@ commentRouter.delete(
   comment.authMiddleware,
   commentController.deleteComment
 );
+commentRouter.get(
+  "/getTotalCommentCount",
+  commentController.getTotalCommentCount
+);
+
 // commentRouter.patch(
 //   "/moder/:id/moderate",
 //   comment.authMiddleware,

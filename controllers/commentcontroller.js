@@ -77,21 +77,16 @@ const commentController = {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }
-}
-  // moderateComment
-  // moderateComment: async (req, res) => {
-  //   try {
-  //     const comment = await Comment.findById(req.params.id);
-  //     if (!comment)
-  //       return res.status(404).json({ message: "Comment not found" });
-
-  //     comment.isApproved = req.body.isApproved;
-  //     await comment.save();
-  //     res.json({ message: "Comment moderation updated", comment });
-  //   } catch (error) {
-  //     res.status(500).json({ error: error.message });
-  //   }
-  // },
+  },
+  // get comments by nos
+  getTotalCommentCount: async (req, res) => {
+    try {
+      const totalComments = await Comment.countDocuments({});
+      res.json({ totalComments });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+};
 
 module.exports = commentController;
