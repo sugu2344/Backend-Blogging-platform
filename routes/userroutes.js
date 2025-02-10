@@ -23,4 +23,11 @@ userRouter.get(
 userRouter.put("/updateprofile", user.checkAuth, userController.updateProfile);
 
 userRouter.get("/getprofile", user.checkAuth, userController.getprofile);
+userRouter.get(
+  "/usercount",
+  user.checkAuth,
+  user.allowRoles(["admin"]),
+  userController.getUserCount
+);
+
 module.exports = userRouter;

@@ -122,6 +122,15 @@ const userController = {
       return response.status(500).json({ message: error.message });
     }
   },
+  // user count
+  getUserCount: async (request, response) => {
+    try {
+      const userCount = await User.countDocuments();
+      response.status(200).json({ totalUsers: userCount });
+    } catch (error) {
+      response.status(500).json({ message: error.message });
+    }
+  },
 
   // Change Password
   changePassword: async (request, response) => {
