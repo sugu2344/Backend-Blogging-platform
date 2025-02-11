@@ -128,7 +128,7 @@ const postController = {
   },
   getPostsByCurrentUser: async (req, res) => {
     try {
-      const userId = req.user.id; // Extract userId from authenticated request
+      const userId = req.user.id; 
 
       if (!userId) {
         return res

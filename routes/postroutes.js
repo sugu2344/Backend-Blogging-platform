@@ -1,6 +1,6 @@
 const express = require("express");
 const post = require("../middleware/post");
-// const comment = require("../middleware/comment");
+
 const User = require("../middleware/user");
 const postController = require("../controllers/postcontroller");
 const user = require("../middleware/user");

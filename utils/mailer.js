@@ -4,8 +4,8 @@ const { SECRET_KEY, PASSWORD } = require("./config");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "suganesh7373@gmail.com", // Your email
-    pass: PASSWORD, // Your email app password
+    user: "suganesh7373@gmail.com", 
+    pass: PASSWORD, 
   },
 });
 
